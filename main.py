@@ -1,16 +1,31 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+from iot.devices import SmartLight, SmartSpeaker
+from iot.message import Message, MessageType
+from iot.service import IOTService
 
 
-# Press the green button in the gutter to run the script.
+def main():
+
+    # create iot service
+    iot_service = IOTService()
+
+    # morning program
+    def wake_up_program():
+        light = SmartLight()
+        speaker = SmartSpeaker()
+
+        light_id = iot_service.register_device(light)
+        speaker_id = iot_service.register_device(speaker)
+
+        morning_messages = []
+        start_light = Message(light_id, MessageType.SWITCH_ON, "Start up")
+        start_speaker = Message(speaker_id, MessageType.SWITCH_ON, "Start up")
+        morning_messages.append(start_light)
+        morning_messages.append(start_speaker)
+
+        iot_service.run_program(morning_messages)
+
+    wake_up_program()
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()
