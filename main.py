@@ -1,4 +1,4 @@
-from iot.devices import SmartLight, SmartSpeaker
+from iot.devices import SmartLight, SmartSpeaker, SmartCurtains
 from iot.message import Message, MessageType
 from iot.service import IOTService
 
@@ -8,23 +8,31 @@ def main():
     # create iot service
     iot_service = IOTService()
 
-    # morning program
+    light = SmartLight()
+    speaker = SmartSpeaker()
+    curtains = SmartCurtains()
+
+    light_id = iot_service.register_device(light)
+    speaker_id = iot_service.register_device(speaker)
+    curtains_id = iot_service.register_device(curtains)
+
     def wake_up_program():
-        light = SmartLight()
-        speaker = SmartSpeaker()
+        wake_up_program_messages = [
+            Message(light_id, MessageType.SWITCH_ON),
+            Message(speaker_id, MessageType.SWITCH_ON),
+            Message(speaker_id, MessageType.PLAY_SONG, "Miles Davis - Blue In Green"),
+            Message(curtains_id, MessageType.OPEN)]
 
-        light_id = iot_service.register_device(light)
-        speaker_id = iot_service.register_device(speaker)
+        iot_service.run_program(wake_up_program_messages)
 
-        morning_messages = []
-        start_light = Message(light_id, MessageType.SWITCH_ON, "Start up")
-        start_speaker = Message(speaker_id, MessageType.SWITCH_ON, "Start up")
-        morning_messages.append(start_light)
-        morning_messages.append(start_speaker)
+    def sleep_program():
+        sleep_program_messages = [
+            Message(curtains_id, MessageType.CLOSE),
+            Message(speaker_id, MessageType.SWITCH_OFF),
+            Message(light_id, MessageType.SWITCH_OFF)
+        ]
 
-        iot_service.run_program(morning_messages)
-
-    wake_up_program()
+        iot_service.run_program(sleep_program_messages)
 
 
 if __name__ == '__main__':

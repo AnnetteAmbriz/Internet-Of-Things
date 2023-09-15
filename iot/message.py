@@ -7,6 +7,7 @@ class MessageType(Enum):
     CLOSE = auto()
     SWITCH_ON = auto()
     SWITCH_OFF = auto()
+    PLAY_SONG = auto()
 
 
 @dataclass
