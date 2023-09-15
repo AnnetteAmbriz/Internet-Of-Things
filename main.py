@@ -17,6 +17,11 @@ def main():
     curtains_id = iot_service.register_device(curtains)
 
     def wake_up_program():
+
+        light.connect()
+        speaker.connect()
+        curtains.connect()
+
         wake_up_program_messages = [
             Message(light_id, MessageType.SWITCH_ON),
             Message(speaker_id, MessageType.SWITCH_ON),
@@ -33,6 +38,12 @@ def main():
         ]
 
         iot_service.run_program(sleep_program_messages)
+
+        curtains.disconnect()
+        speaker.disconnect()
+        light.disconnect()
+
+    wake_up_program()
 
 
 if __name__ == '__main__':

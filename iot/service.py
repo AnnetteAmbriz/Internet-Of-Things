@@ -33,7 +33,7 @@ class IOTService:
         return self.devices[device_id]
 
     def run_program(self, messages: list[Message]) -> None:
-        print("===========Running program===========")
+        print("===========Running program ===========")
         for msg in messages:
             self.devices[msg.device_id].send_message(msg.msg_type, msg.data)
         print("======Completed running program=======")
